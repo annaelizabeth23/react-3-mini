@@ -28,9 +28,21 @@ class App extends Component {
     this.deleteBuyer = this.deleteBuyer.bind( this );
   }
 
+componentDidMount(){
+  axios.get('https://joes-autos.herokuapp.com/api/vehicles').then(results => {
+    toast.success("Successfully got Vehicles.");
+    // setState with response -> vehiclesToDisplay:
+    this.setState({'vehiclesToDisplay': results.data});
+  }).catch(() => toast.error("Failed at Fetching Vehicles"));
+};
+
   getVehicles() {
-    // axios (GET)
-    // setState with response -> vehiclesToDisplay
+    // axios (GET):
+    axios.get('https://joes-autos.herokuapp.com/api/vehicles').then(results => {
+      toast.success("Successfully got Vehicles.");
+      // setState with response -> vehiclesToDisplay:
+      this.setState({'vehiclesToDisplay': results.data});
+    }).catch(() => toast.error("Failed at Fetching Vehicles"));
   }
 
   getPotentialBuyers() {
@@ -40,7 +52,11 @@ class App extends Component {
 
   sellCar( id ) {
     // axios (DELETE)
-    // setState with response -> vehiclesToDisplay
+    axios.delete(`https://joes-autos.herokuapp.com/api/vehicles/${id}`).then(results => {
+      toast.success("Successfully Sold Car.");
+       // setState with response -> vehiclesToDisplay
+      this.setState({'vehiclesToDisplay': results.data.vehicles});
+    }).catch(() => toast.error("Failed at Selling Car."));
   }
 
   filterByMake() {
@@ -59,7 +75,11 @@ class App extends Component {
 
   updatePrice( priceChange, id ) {
     // axios (PUT)
+    axios.put(`https://joes-autos.herokuapp.com/api/vehicles/${ id }/${ priceChange }`).then(results => {
+    toast.success("Successfully got Vehicles.");
     // setState with response -> vehiclesToDisplay
+    this.setState({vehiclesToDisplay: results.data.vehicles});
+    }).catch( () => toast.error("Failed at updating price."));
   }
 
   addCar() {
@@ -72,7 +92,11 @@ class App extends Component {
     };
 
     // axios (POST)
+    axios.post('https://joes-autos.herokuapp.com/api/vehicles', newCar).then(results => {
     // setState with response -> vehiclesToDisplay
+    toast.success("Successfully Created New Vehicle.");
+    this.setState({vehiclesToDisplay: results.data.vehicles});
+  }).catch(() => toast.error("Failed at Creating New Vehicle."));
   }
 
   addBuyer() {
